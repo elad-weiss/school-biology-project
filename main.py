@@ -41,6 +41,7 @@ tkinter.ttk.Separator(root, orient=HORIZONTAL).grid(column=0, row=user_lists_len
 add_list_btn = Button(root, text="+ Add List", font="Helvetica 12 bold", padx=15, pady=30, borderwidth=0)
 add_list_btn.grid(column=0, row=user_lists_len+4)
 
+#creats and places on the screen the "delete list" button
 delete_list_btn = Button(root, text="- Delete List", font="Helvetica 12 bold",
                          padx=15, pady=20, borderwidth=0)
 delete_list_btn.grid(column=0, row=user_lists_len+5)
