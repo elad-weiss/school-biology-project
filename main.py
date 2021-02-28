@@ -84,5 +84,7 @@ functionalities.load_list(curr_list, root, curr_frame)
 add_task_btn = Button(root, text="+ Add Task", font="Helvetica 14", padx=15, pady=15, borderwidth=0.5)
 add_task_btn.place(relx=0.55, rely=0.85)
 
+print("this is a git test")
+
 
 root.mainloop()
