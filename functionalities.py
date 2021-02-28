@@ -1,9 +1,10 @@
 import json
 from tkinter import *
 
+
 class task_bar:
     def __init__(self, root, text):
-        #TODO: finish function and return the frame(task_frame) before packing into "root"
+        # TODO: finish function and return the frame(task_frame) before packing into "root"
         self.task_frame = LabelFrame(root, text="", padx=5, pady=5)
         self.task = Label(self.task_frame, text=text)
         self.task.pack()
