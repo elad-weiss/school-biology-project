@@ -6,14 +6,16 @@ import functionalities
 
 #a variable that saves the current list that is on the screen
 curr_list = ""
+curr_frame = ""
 
 #A function to change the current list
 def change_list(name):
     global curr_list
+    global curr_frame
     print(f"change list name: {name}")
     curr_list = name
     print(f"change curr_list: {curr_list}")
-    functionalities.load_list(name, root)
+    curr_frame = functionalities.load_list(name, root, curr_frame)
     list_title.config(text=curr_list)
 
 root = Tk()
@@ -76,7 +78,11 @@ list_title = Label(root, text=curr_list, font="Helvetica 16 bold", padx=15, pady
 list_title.place(relx=0.55, rely=0.03)
 
 #loads all the task bars on screen
-functionalities.load_list(curr_list, root)
+functionalities.load_list(curr_list, root, curr_frame)
+
+#an "add task" button
+add_task_btn = Button(root, text="+ Add Task", font="Helvetica 14", padx=15, pady=15, borderwidth=0.5)
+add_task_btn.place(relx=0.55, rely=0.85)
 
 
 root.mainloop()
