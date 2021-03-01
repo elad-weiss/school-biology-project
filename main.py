@@ -12,9 +12,7 @@ curr_frame = ""
 def change_list(name):
     global curr_list
     global curr_frame
-    print(f"change list name: {name}")
     curr_list = name
-    print(f"change curr_list: {curr_list}")
     curr_frame = functionalities.load_list(name, root, curr_frame)
     list_title.config(text=curr_list)
 
@@ -38,13 +36,11 @@ user_lists = []
 
 #append each name from the json file to the user_lists list as a button object
 for list_name in lists:
-    print(f"checkpoint A: {list_name}")
     user_lists.append(Button(root, text=list_name, font="Helvetica 14", padx=15, pady=20, borderwidth=0))
 
 #places each button from the user_lists list on the screen
 for i in range(len(user_lists)):
     y_pos = i/10+0.25
-    print("list text:", user_lists[i].cget("text"))
     user_lists[i].config(command=lambda name_index = user_lists[i].cget("text"): change_list(name_index))
     user_lists[i].place(relx=0.02, rely=y_pos)
 
@@ -82,6 +78,6 @@ functionalities.load_list(curr_list, root, curr_frame)
 
 #an "add task" button
 add_task_btn = Button(root, text="+ Add Task", font="Helvetica 14", padx=15, pady=15, borderwidth=0.5)
-add_task_btn.place(relx=0.5, rely=0.85)
+add_task_btn.place(relx=0.55, rely=0.85)
 
 root.mainloop()
