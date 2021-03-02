@@ -78,7 +78,7 @@ functionalities.load_list(curr_list, root, curr_frame)
 
 #an "add task" button
 add_task_btn = Button(root, text="+ Add Task", font="Helvetica 14", padx=15, pady=15, borderwidth=0.5,
-                      command=lambda: functionalities.add_task(curr_list))
+                      command=lambda: functionalities.add_task(curr_list, root, curr_frame))
 add_task_btn.place(relx=0.55, rely=0.85)
 
 root.mainloop()

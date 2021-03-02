@@ -1,5 +1,6 @@
 import json
 from tkinter import *
+from tkinter import messagebox
 
 
 class task_bar:
@@ -44,7 +45,6 @@ def load_list(name, root, curr_frame):
         return main_frame
 
 
-
 def edit_task_status(var, place):
     with open("lists.json") as f:
         data = json.load(f)
@@ -54,7 +54,8 @@ def edit_task_status(var, place):
     with open("lists.json", "w") as f:
         json.dump(data, f, indent=2)
 
-def add_task(name):
+
+def add_task(name, root, curr_frame):
     #creating a new window and setting a title
     new_task = Toplevel()
     new_task.title("New Task")
@@ -86,5 +87,47 @@ def add_task(name):
     liked_task.grid(row=3, column=1)
 
     #a button that add the task to the json file
-    create_btn = Button(new_task, text="CREATE", command=new_task.destroy)
+    create_btn = Button(new_task, text="CREATE",
+                        command=lambda: save_new_task(new_task, name, task_name_input.get(), time_input.get(), liked.get(), root, curr_frame))
     create_btn.grid(row=4, column=2)
+
+
+def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_frame):
+    #step I: get the data from the json file and convert to python
+    with open("lists.json") as f:
+        data = json.load(f)
+    #step II: checks if all the inputs are valid(list does not contain more then 7 task and est time is a number and task name ins not too long)
+    try:
+        est_time = int(est_time)
+        if len(data[list_name]) >= 7:
+            window.destroy()
+            messagebox.showerror("Error", "List is full")
+            return None
+        if len(task_name) > 30:
+            window.destroy()
+            messagebox.showerror("Error", "Task name is too long")
+            return None
+        if len(task_name) <= 0:
+            window.destroy()
+            messagebox.showerror("Error", "Task name is invalid")
+    except ValueError:
+        window.destroy()
+        messagebox.showerror("Error", "Invalid number entered in est. time")
+        return None
+    #step III: insert the new task to the converted json file
+    task_to_add = [task_name, False, est_time]
+    if is_liked == "Yes": task_to_add.append(True)
+    elif is_liked == "No": task_to_add.append(False)
+    data[list_name].append(task_to_add)
+    #step IV: convert data back to json and save to the file
+    with open("lists.json", "w") as f:
+        json.dump(data, f, indent=2)
+    #step V: sort the list and reload the list on the screen
+    sort_list()
+    load_list(list_name, root, curr_frame)
+    window.destroy()
+
+
+
+def sort_list():
+    pass
