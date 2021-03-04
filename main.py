@@ -81,4 +81,7 @@ add_task_btn = Button(root, text="+ Add Task", font="Helvetica 14", padx=15, pad
                       command=lambda: functionalities.add_task(curr_list, root, curr_frame))
 add_task_btn.place(relx=0.55, rely=0.85)
 
+about_btn = Button(root, text="ABOUT", font="Helvetica 14", command=functionalities.show_about)
+about_btn.place(relx=0.90, rely=0.90)
+
 root.mainloop()

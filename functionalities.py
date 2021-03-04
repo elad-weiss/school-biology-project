@@ -1,6 +1,7 @@
 import json
 from tkinter import *
 from tkinter import messagebox
+import webbrowser
 
 
 class task_bar:
@@ -131,3 +132,8 @@ def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_f
 
 def sort_list():
     pass
+
+
+def show_about():
+    url = "https://github.com/elad-weiss/school-biology-project/blob/master/README.md"
+    webbrowser.open(url, new=1)
