@@ -105,13 +105,14 @@ def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_f
             window.destroy()
             messagebox.showerror("Error", "List is full")
             return None
-        if len(task_name) > 30:
+        elif len(task_name) > 30:
             window.destroy()
             messagebox.showerror("Error", "Task name is too long")
             return None
-        if len(task_name) <= 0:
+        elif len(task_name) <= 0:
             window.destroy()
             messagebox.showerror("Error", "Task name is invalid")
+            return None
     except ValueError:
         window.destroy()
         messagebox.showerror("Error", "Invalid number entered in est. time")
@@ -130,7 +131,7 @@ def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_f
     window.destroy()
 
 
-def add_list():
+def add_list(root):
     #create and setup the creation window
     new_list_window = Toplevel()
     new_list_window.title("New List")
@@ -143,8 +144,38 @@ def add_list():
     list_name_input = Entry(new_list_window)
     list_name_input.grid(row=0, column=1)
     #create button
-    create_btn = Button(new_list_window, text="create")
+    create_btn = Button(new_list_window, text="create",
+                        command=lambda: save_new_list(list_name_input.get(), new_list_window, root))
     create_btn.grid(row=1, column=1)
+
+
+def save_new_list(list_name, window, root):
+    list_name = str(list_name)
+    if len(list_name) >= 13:
+        window.destroy()
+        messagebox.showerror("Error", "List name is too long")
+        return None
+    elif len(list_name) <= 0:
+        window.destroy()
+        messagebox.showerror("Error", "List name is invalid")
+        return None
+    with open("lists.json") as rf:
+        data = json.load(rf)
+        if list_name in list(data.keys()):
+            window.destroy()
+            messagebox.showerror("Error", "List name already exists")
+            return None
+        elif len(list(data.keys())) >= 6:
+            window.destroy()
+            messagebox.showerror("Error", "You have too many lists")
+            return None
+        data.update({list_name: []})
+        with open("lists.json", "w") as wf:
+            json.dump(data, wf, indent=2)
+    window.destroy()
+    root.destroy()
+    main.main_window()
+
 
 def sort_list():
     pass
