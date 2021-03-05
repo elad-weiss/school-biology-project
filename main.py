@@ -31,27 +31,27 @@ class main_window:
 
         #append each name from the json file to the user_lists list as a button object
         for list_name in lists:
-            user_lists.append(Button(self.root, text=list_name, font="Helvetica 14", padx=15, pady=20, borderwidth=0))
+            user_lists.append(Button(self.root, text=list_name, font="Helvetica 14", padx=15, borderwidth=0))
 
         #places each button from the user_lists list on the screen
         for i in range(len(user_lists)):
-            y_pos = i/10+0.25
+            y_pos = i/10+0.17
             user_lists[i].config(command=lambda name_index = user_lists[i].cget("text"): self.change_list(name_index))
             user_lists[i].place(relx=0.02, rely=y_pos)
 
-        user_lists_len = (len(user_lists)+1)/10+0.1
+        user_lists_len = (len(user_lists)+1)/10+0.01
 
         #a dividing line between the lists buttons and the add list button
         tkinter.ttk.Separator(self.root, orient=HORIZONTAL).place(relx=0.01, rely=user_lists_len+0.1, relwidth=0.15, relheight=1)
 
         #creats and places on the screen the "add list" button
-        add_list_btn = Button(self.root, text="+ Add List", font="Helvetica 12 bold", padx=15, pady=30, borderwidth=0,
-                              command = functionalities.add_list)
+        add_list_btn = Button(self.root, text="+ Add List", font="Helvetica 12 bold", padx=15, pady=15, borderwidth=0,
+                              command=lambda: functionalities.add_list(self.root))
         add_list_btn.place(relx=0.02, rely=user_lists_len+0.12)
 
         #creats and places on the screen the "delete list" button
         delete_list_btn = Button(self.root, text="- Delete List", font="Helvetica 12 bold",
-                                 padx=15, pady=20, borderwidth=0)
+                                 padx=15, pady=15, borderwidth=0)
         delete_list_btn.place(relx=0.02, rely=user_lists_len+0.22)
 
 
