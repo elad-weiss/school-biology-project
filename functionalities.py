@@ -2,6 +2,7 @@ import json
 from tkinter import *
 from tkinter import messagebox
 import webbrowser
+import main
 
 
 class task_bar:
@@ -129,6 +130,21 @@ def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_f
     window.destroy()
 
 
+def add_list():
+    #create and setup the creation window
+    new_list_window = Toplevel()
+    new_list_window.title("New List")
+    new_list_window.geometry("200x60")
+
+    #set up the gui
+    #"name: " label
+    Label(new_list_window, text="Name: ", font="Helvetica 14").grid(row=0, column=0)
+    #text box input
+    list_name_input = Entry(new_list_window)
+    list_name_input.grid(row=0, column=1)
+    #create button
+    create_btn = Button(new_list_window, text="create")
+    create_btn.grid(row=1, column=1)
 
 def sort_list():
     pass
