@@ -7,12 +7,14 @@ import main
 
 class task_bar:
     def __init__(self, root, text, place):
-        # TODO: finish function and return the frame(task_frame) before packing into "root"
         self.task_frame = LabelFrame(root, text="", padx=5, pady=5)
         var = IntVar()
         self.task_status = Checkbutton(self.task_frame, text=text, variable=var,
-                                       command=lambda: edit_task_status(var.get(), place))
-        self.task_status.grid(row=0, column=0)
+                                       command=lambda: edit_task_status(var.get(), place), padx=5)
+        self.task_status.place(relx=0.01, rely=-0.1)
+        self.start_task_btn = Button(self.task_frame, text="start")
+        self.start_task_btn.place(relx=0.85, rely=-0.1)
+        Label(self.task_frame, text="").grid(column=0, row=0)
         self.task_frame.pack()
 
     def create_task_bar(self):
