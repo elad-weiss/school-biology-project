@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 import webbrowser
 import main
+import datetime
 
 
 class task_bar:
@@ -52,12 +53,25 @@ def load_list(name, root, curr_frame):
 def edit_task_status(var, place):
     with open("lists.json") as f:
         data = json.load(f)
-        if var == 0: data[place[0]][place[1]][1] = False
-        elif var == 1: data[place[0]][place[1]][1] = True
-        else: print("An error has happened")
-    with open("lists.json", "w") as f:
-        json.dump(data, f, indent=2)
-
+    if var == 0:
+        data[place[0]][place[1]][1] = False
+    elif var == 1:
+        data[place[0]][place[1]][1] = True
+        with open("lists.json", "w") as f:
+            json.dump(data, f, indent=2)
+        start_datetime = data[place[0]][place[1]][4].split(":")
+        curr_datetime = get_time().split(":")
+        offsets = ([2022, 12, 30, 24, 60, 60], [525960, 43830, 1440, 60, 1, 0])
+        minutes_sum = 0
+        time_task_took = []
+        for i in range(len(start_datetime)):
+            diff = int(curr_datetime[i]) - int(start_datetime[i])
+            time_task_took.append(diff)
+        for i in range(len(time_task_took), 0, -1):
+            if time_task_took[i - 1] < 0: time_task_took[i - 1] = offsets[0][i - 1] + time_task_took[i - 1]
+            minutes_sum += time_task_took[i - 1] * offsets[1][i - 1]
+        print(f"task too {minutes_sum} minutes")
+    else: print("An error has happened")
 
 def add_task(name, root, curr_frame):
     #creating a new window and setting a title
@@ -97,6 +111,7 @@ def add_task(name, root, curr_frame):
 
 
 def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_frame):
+    #list saving protocol: "list name": ["task name", state(bool), est_time, is_liked(bool)]
     #step I: get the data from the json file and convert to python
     with open("lists.json") as f:
         data = json.load(f)
@@ -123,6 +138,7 @@ def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_f
     task_to_add = [task_name, False, est_time]
     if is_liked == "Yes": task_to_add.append(True)
     elif is_liked == "No": task_to_add.append(False)
+    task_to_add.append(get_time())
     data[list_name].append(task_to_add)
     #step IV: convert data back to json and save to the file
     with open("lists.json", "w") as f:
@@ -186,3 +202,21 @@ def sort_list():
 def show_about():
     url = "https://github.com/elad-weiss/school-biology-project/blob/master/README.md"
     webbrowser.open(url, new=1)
+
+def get_time():
+    full_time = str(datetime.datetime.now())
+    full_time = full_time.split()
+    time = full_time[1].split(".")[0]
+    time = time.split(":")
+    for i in range(len(time)):
+        if time[i][0] == "0":
+            if time[i][1] == "0" and i != 0: time[i] = "60"
+            elif time[i][1] == "0" and i == 0: time[i] = "24"
+            else: time[i] = time[i][1]
+    time = ":".join(time)
+    date = full_time[0].split("-")
+    for i in range(len(date)):
+        if date[i][0] == "0": date[i] = date[i][1]
+    date = ":".join(date)
+    curr_time = date + ":" + time
+    return curr_time
