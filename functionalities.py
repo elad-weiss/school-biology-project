@@ -10,11 +10,12 @@ class task_bar:
     def __init__(self, root, text, place):
         self.task_frame = LabelFrame(root, text="", padx=5, pady=5)
         var = IntVar()
-        self.task_status = Checkbutton(self.task_frame, text=text, variable=var,
-                                       command=lambda: edit_task_status(var.get(), place), padx=5)
-        self.task_status.place(relx=0.01, rely=-0.1)
-        self.start_task_btn = Button(self.task_frame, text="start")
+        self.start_task_btn = Button(self.task_frame, text="start",
+                                     command=lambda: start_task(place, self.start_task_btn))
         self.start_task_btn.place(relx=0.85, rely=-0.1)
+        self.task_status = Checkbutton(self.task_frame, text=text, variable=var,
+                                       command=lambda: edit_task_status(var.get(), place, self.start_task_btn), padx=5)
+        self.task_status.place(relx=0.01, rely=-0.1)
         Label(self.task_frame, text="").grid(column=0, row=0)
         self.task_frame.pack()
 
@@ -50,11 +51,12 @@ def load_list(name, root, curr_frame):
         return main_frame
 
 
-def edit_task_status(var, place):
+def edit_task_status(var, place, start_btn):
     with open("lists.json") as f:
         data = json.load(f)
     if var == 0:
         data[place[0]][place[1]][1] = False
+        start_btn.config(state=NORMAL)
     elif var == 1:
         data[place[0]][place[1]][1] = True
         with open("lists.json", "w") as f:
@@ -68,9 +70,12 @@ def edit_task_status(var, place):
             diff = int(curr_datetime[i]) - int(start_datetime[i])
             time_task_took.append(diff)
         for i in range(len(time_task_took), 0, -1):
-            if time_task_took[i - 1] < 0: time_task_took[i - 1] = offsets[0][i - 1] + time_task_took[i - 1]
+            if time_task_took[i - 1] < 0:
+                time_task_took[i - 1] = offsets[0][i - 1] + time_task_took[i - 1]
+                time_task_took[i-2] -= 1
             minutes_sum += time_task_took[i - 1] * offsets[1][i - 1]
         print(f"task too {minutes_sum} minutes")
+        start_btn.config(state=DISABLED)
     else: print("An error has happened")
 
 def add_task(name, root, curr_frame):
@@ -220,3 +225,12 @@ def get_time():
     date = ":".join(date)
     curr_time = date + ":" + time
     return curr_time
+
+
+def start_task(place, start_btn):
+    with open("lists.json") as rf:
+        data = json.load(rf)
+        data[place[0]][place[1]][4] = get_time()
+        with open("lists.json", "w") as wf:
+            json.dump(data, wf, indent=2)
+    start_btn.config(state=DISABLED)
