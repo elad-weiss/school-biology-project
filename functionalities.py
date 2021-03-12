@@ -59,8 +59,6 @@ def edit_task_status(var, place, start_btn):
         start_btn.config(state=NORMAL)
     elif var == 1:
         data[place[0]][place[1]][1] = True
-        with open("lists.json", "w") as f:
-            json.dump(data, f, indent=2)
         start_datetime = data[place[0]][place[1]][4].split(":")
         curr_datetime = get_time().split(":")
         offsets = ([2022, 12, 30, 24, 60, 60], [525960, 43830, 1440, 60, 1, 0])
@@ -74,7 +72,9 @@ def edit_task_status(var, place, start_btn):
                 time_task_took[i - 1] = offsets[0][i - 1] + time_task_took[i - 1]
                 time_task_took[i-2] -= 1
             minutes_sum += time_task_took[i - 1] * offsets[1][i - 1]
-        print(f"task too {minutes_sum} minutes")
+        with open("lists.json", "w") as f:
+            data[place[0]][place[1]].append(minutes_sum)
+            json.dump(data, f, indent=2)
         start_btn.config(state=DISABLED)
     else: print("An error has happened")
 
