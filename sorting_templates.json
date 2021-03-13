@@ -1,14 +1,5 @@
 {
-  "sort a": [
-    false,
-    0
-  ],
-  "sort b": [
-    false,
-    0
-  ],
-  "sort c": [
-    false,
-    0
-  ]
+  "sort a": [false, 0],
+  "sort b": [false, 0],
+  "sort c": [false, 0]
 }
