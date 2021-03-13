@@ -4,6 +4,7 @@ from tkinter import messagebox
 import webbrowser
 import main
 import datetime
+import sorter
 
 
 class task_bar:
@@ -149,7 +150,7 @@ def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_f
     with open("lists.json", "w") as f:
         json.dump(data, f, indent=2)
     #step V: sort the list and reload the list on the screen
-    sort_list()
+    sort_list(list_name)
     load_list(list_name, root, curr_frame)
     window.destroy()
 
@@ -200,8 +201,25 @@ def save_new_list(list_name, window, root):
     main.main_window()
 
 
-def sort_list():
-    pass
+def sort_list(list_name):
+    with open("sorting_templates.json") as f:
+        data = json.load(f)
+    template = ""
+    for sort_template in data:
+        if not data[sort_template][0]:
+            template = sort_template
+            with open("sorting_templates.json", "w") as f:
+                data[sort_template][0] = True
+                json.dump(data, f, indent=2)
+            break
+    if template == "":
+        best_score = ("sort a", 0)
+        for sort in data:
+            if data[sort][1] > best_score[1]: best_score = (sort, data[sort[1]])
+        template = best_score[0]
+    if template == "sort a": sorter.sort_a()
+    elif template == "sort b": sorter.sort_b()
+    elif template == "sort c": sorter.sort_c()
 
 
 def show_about():
