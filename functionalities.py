@@ -215,12 +215,18 @@ def sort_list(list_name):
     if template == "":
         best_score = ("sort a", 0)
         for sort in data:
-            if data[sort][1] > best_score[1]: best_score = (sort, data[sort[1]])
+            if data[sort][1] > best_score[1]: best_score = (sort, data[sort][1])
         template = best_score[0]
-    if template == "sort a": sorter.sort_a()
-    elif template == "sort b": sorter.sort_b()
-    elif template == "sort c": sorter.sort_c()
-
+    if template == "sort a": sorter.sort_a(list_name)
+    elif template == "sort b": sorter.sort_b(list_name)
+    elif template == "sort c": sorter.sort_c(list_name)
+    elif template == "sort d": sorter.sort_d(list_name)
+    elif template == "sort e": sorter.sort_e(list_name)
+    elif template == "sort f": sorter.sort_f(list_name)
+    elif template == "sort g": sorter.sort_g(list_name)
+    elif template == "sort h": sorter.sort_h(list_name)
+    elif template == "sort i": sorter.sort_i(list_name)
+    elif template == "sort j": sorter.sort_j(list_name)
 
 def show_about():
     url = "https://github.com/elad-weiss/school-biology-project/blob/master/README.md"

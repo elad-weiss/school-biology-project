@@ -1,12 +1,96 @@
 import json
 
+#this file contains all the sorting functions
+#the functions are based on the bubble sort algorithm
+
+#sorts tasks from shortest to longest
 def sort_a(list_name):
-    print("sorting sort a")
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    for i in range(len(data[list_name])-1, 0, -1):
+        for t in range(i):
+            if data[list_name][t][2] > data[list_name][t+1][2]:
+                temp = data[list_name][t]
+                data[list_name][t] = data[list_name][t+1]
+                data[list_name][t+1] = temp
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
 
-
+#sorts tasks from longest to shortest
 def sort_b(list_name):
-    print("sorting sort b")
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    for i in range(len(data[list_name]) - 1, 0, -1):
+        for t in range(i):
+            if data[list_name][t][2] < data[list_name][t + 1][2]:
+                temp = data[list_name][t]
+                data[list_name][t] = data[list_name][t + 1]
+                data[list_name][t + 1] = temp
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
 
-
+#sorts one short task on long task
 def sort_c(list_name):
-    print("sorting sort c")
+    sort_a(list_name)
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    curr_list = data[list_name]
+    sorted_list = []
+    for i in range(len(curr_list)-1):
+        if i % 2 == 0: sorted_list.append(curr_list[int(i/2)])
+        else: sorted_list.append(curr_list[len(curr_list)-int(i/2)-1])
+    data[list_name] = sorted_list
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
+
+#sorts all the liked tasks to be first and all the disliked task last
+def sort_d(list_name):
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    for i in range(len(data[list_name]) - 1, 0, -1):
+        for t in range(i):
+            if data[list_name][t][3] < data[list_name][t + 1][3]:
+                temp = data[list_name][t]
+                data[list_name][t] = data[list_name][t + 1]
+                data[list_name][t + 1] = temp
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
+
+#sorts all the disliked tasks to be first and all the liked task last
+def sort_e(list_name):
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    for i in range(len(data[list_name]) - 1, 0, -1):
+        for t in range(i):
+            if data[list_name][t][3] > data[list_name][t + 1][3]:
+                temp = data[list_name][t]
+                data[list_name][t] = data[list_name][t + 1]
+                data[list_name][t + 1] = temp
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
+
+#sorts one liked task one disliked task
+def sort_f(list_name):
+    sort_d(list_name)
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    curr_list = data[list_name]
+    sorted_list = []
+    for i in range(len(curr_list)):
+        if i % 2 == 0: sorted_list.append(curr_list[int(i/2)])
+        else: sorted_list.append(curr_list[len(curr_list)-int(i/2)-1])
+    data[list_name] = sorted_list
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
+
+def sort_g(list_name):
+    pass
+
+def sort_h(list_name):
+    pass
+
+def sort_i(list_name):
+    pass
+
+def sort_j(list_name):
+    pass
