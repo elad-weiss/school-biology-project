@@ -58,6 +58,12 @@ def edit_task_status(var, place, start_btn):
     if var == 0:
         data[place[0]][place[1]][1] = False
         start_btn.config(state=NORMAL)
+        try:
+            del data[place[0]][place[1]][5]
+        except IndexError:
+            pass
+        with open("lists.json", "w") as wf:
+            json.dump(data, wf, indent=2)
     elif var == 1:
         data[place[0]][place[1]][1] = True
         start_datetime = data[place[0]][place[1]][4].split(":")
@@ -77,6 +83,9 @@ def edit_task_status(var, place, start_btn):
             data[place[0]][place[1]].append(minutes_sum)
             json.dump(data, f, indent=2)
         start_btn.config(state=DISABLED)
+        #TODO: check how long the task took and then sort
+        sort_list(place[0])
+        #TODO: load list after sorting
     else: print("An error has happened")
 
 def add_task(name, root, curr_frame):
@@ -229,7 +238,7 @@ def sort_list(list_name):
     elif template == "sort j": sorter.sort_j(list_name)
 
 def show_about():
-    url = "https://github.com/elad-weiss/school-biology-project/blob/master/README.md"
+    url = "https://docs.google.com/document/d/11XoErCZp7__bgPXNzKR_mUDm_TOHd2FSd5p2P30XewM/edit?usp=sharing"
     webbrowser.open(url, new=1)
 
 def get_time():
