@@ -83,14 +83,80 @@ def sort_f(list_name):
     with open("lists.json", "w") as wf:
         json.dump(data, wf, indent=2)
 
+#sorts liked first and disliked last when in each sublist(liked and disliked) its shorted from shortest to longest
 def sort_g(list_name):
-    pass
+    sort_d(list_name)
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    base_list = data[list_name]
+    for i in range(len(base_list)):
+        if not base_list[i][3]:
+            base_list = [base_list[0:i], base_list[i:len(base_list)]]
+            break
+    for curr_list in base_list:
+        for i in range(len(curr_list)-1):
+            for j in range(0, len(curr_list)-i-1):
+                if curr_list[j][2] > curr_list[j + 1][2]:
+                    curr_list[j], curr_list[j + 1] = curr_list[j + 1], curr_list[j]
+    base_list = base_list[0] + base_list[1]
+    data[list_name] = base_list
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
 
+#sorts liked first and disliked last when in each sublist(liked and disliked) its shorted from longest to shortest
 def sort_h(list_name):
-    pass
+    sort_d(list_name)
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    base_list = data[list_name]
+    for i in range(len(base_list)):
+        if not base_list[i][3]:
+            base_list = [base_list[0:i], base_list[i:len(base_list)]]
+            break
+    for curr_list in base_list:
+        for i in range(len(curr_list) - 1):
+            for j in range(0, len(curr_list) - i - 1):
+                if curr_list[j][2] < curr_list[j + 1][2]:
+                    curr_list[j], curr_list[j + 1] = curr_list[j + 1], curr_list[j]
+    base_list = base_list[0] + base_list[1]
+    data[list_name] = base_list
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
 
 def sort_i(list_name):
-    pass
+    sort_e(list_name)
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    base_list = data[list_name]
+    for i in range(len(base_list)):
+        if base_list[i][3]:
+            base_list = [base_list[0:i], base_list[i:len(base_list)]]
+            break
+    for curr_list in base_list:
+        for i in range(len(curr_list) - 1):
+            for j in range(0, len(curr_list) - i - 1):
+                if curr_list[j][2] > curr_list[j + 1][2]:
+                    curr_list[j], curr_list[j + 1] = curr_list[j + 1], curr_list[j]
+    base_list = base_list[0] + base_list[1]
+    data[list_name] = base_list
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
 
 def sort_j(list_name):
-    pass
+    sort_e(list_name)
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    base_list = data[list_name]
+    for i in range(len(base_list)):
+        if base_list[i][3]:
+            base_list = [base_list[0:i], base_list[i:len(base_list)]]
+            break
+    for curr_list in base_list:
+        for i in range(len(curr_list) - 1):
+            for j in range(0, len(curr_list) - i - 1):
+                if curr_list[j][2] < curr_list[j + 1][2]:
+                    curr_list[j], curr_list[j + 1] = curr_list[j + 1], curr_list[j]
+    base_list = base_list[0] + base_list[1]
+    data[list_name] = base_list
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
