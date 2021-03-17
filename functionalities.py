@@ -9,6 +9,7 @@ import sorter
 
 class task_bar:
     def __init__(self, root, text, place, state, curr_frame):
+        print(f"task_bar: {type(curr_frame)}")
         self.task_frame = LabelFrame(root, text="", padx=5, pady=5)
         var = IntVar()
         self.start_task_btn = Button(self.task_frame, text="start",
@@ -17,7 +18,7 @@ class task_bar:
         else: self.start_task_btn.config(state=NORMAL)
         self.start_task_btn.place(relx=0.85, rely=-0.1)
         self.task_status = Checkbutton(self.task_frame, text=text, variable=var,
-                                       command=lambda: edit_task_status(var.get(), place, self.start_task_btn, curr_frame, root),
+                                       command=lambda: edit_task_status(var.get(), place, self.start_task_btn, root, curr_frame),
                                        padx=5)
         self.task_status.place(relx=0.01, rely=-0.1)
         Label(self.task_frame, text="").grid(column=0, row=0)
@@ -29,8 +30,11 @@ class task_bar:
     def get_status(self):
         return self.task_status
 
+#a global variable that keeps track of the current sort
+current_sort = "sort a"
 
 def load_list(name, root, curr_frame):
+    print(f"load_list: {type(curr_frame)}")
     if curr_frame != "":
         curr_frame.destroy()
     main_frame = Frame(root, padx=5, pady=5)
@@ -56,6 +60,7 @@ def load_list(name, root, curr_frame):
 
 
 def edit_task_status(var, place, start_btn, root, curr_frame):
+    print(f"edit_task_status: {type(curr_frame)}")
     with open("lists.json") as f:
         data = json.load(f)
     if var == 0:
@@ -91,6 +96,7 @@ def edit_task_status(var, place, start_btn, root, curr_frame):
 
 
 def add_task(name, root, curr_frame):
+    print(f"add_task: {type(curr_frame)}")
     #creating a new window and setting a title
     new_task = Toplevel()
     new_task.title("New Task")
@@ -128,6 +134,7 @@ def add_task(name, root, curr_frame):
 
 
 def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_frame):
+    print(f"save_new_task: {type(curr_frame)}")
     #list saving protocol: "list name": ["task name", state(bool), est_time, is_liked(bool)]
     #step I: get the data from the json file and convert to python
     with open("lists.json") as f:
@@ -258,10 +265,12 @@ def sort_list(list_name):
                 json.dump(data, f, indent=2)
             break
     if template == "":
-        best_score = ("sort a", 0)
+        best_score = ("sort a", data["sort a"][1])
         for sort in data:
             if data[sort][1] > best_score[1]: best_score = (sort, data[sort][1])
         template = best_score[0]
+    global current_sort
+    current_sort = template
     if template == "sort a": sorter.sort_a(list_name)
     elif template == "sort b": sorter.sort_b(list_name)
     elif template == "sort c": sorter.sort_c(list_name)
@@ -283,10 +292,21 @@ def score_sort(list_name, root, curr_frame):
         if not task[1]:
             finished_list = False
             break
-    # TODO: check how long the task took and then sort
-    sort_list(list_name)
-    # TODO: load list after sorting
-    load_list(list_name, root, curr_frame)
+    if finished_list:
+        #sum up time list took to finish and add to score
+        global current_sort
+        print(current_sort)
+        score = 0
+        for task in curr_list:
+            score += task[2] - task[5]
+        with open("sorting_templates.json") as rf:
+            data = json.load(rf)
+            data[current_sort][1] += score
+            with open("sorting_templates.json", "w") as wf:
+                json.dump(data, wf, indent=2)
+        sort_list(list_name)
+        print(f"curr_frame type = {type(curr_frame)}")
+        load_list(list_name, root, curr_frame)
 
 
 def show_about():

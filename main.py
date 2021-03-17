@@ -88,6 +88,7 @@ class main_window:
         self.curr_list = name
         self.curr_frame = functionalities.load_list(name, self.root, self.curr_frame)
         self.list_title.config(text=self.curr_list)
+        print(f"in main: {type(self.curr_frame)}")
 
 if __name__ == '__main__':
     main_window()
