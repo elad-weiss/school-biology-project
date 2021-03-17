@@ -234,7 +234,7 @@ def delete_list(root):
                         command=lambda: delete_list_from_db(list_to_del.get(), delete_list_win, root))
     delete_btn.grid(row=1, column=1)
 
-
+#deletes the list from the data base
 def delete_list_from_db(list_name, window, root):
     with open("lists.json") as rf:
         data = json.load(rf)

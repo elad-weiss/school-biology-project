@@ -51,7 +51,8 @@ class main_window:
 
         #creats and places on the screen the "delete list" button
         delete_list_btn = Button(self.root, text="- Delete List", font="Helvetica 12 bold",
-                                 padx=15, pady=15, borderwidth=0, command=lambda: functionalities.delete_list(self.root))
+                                 padx=15, pady=15, borderwidth=0,
+                                 command=lambda: functionalities.delete_list(self.root))
         delete_list_btn.place(relx=0.02, rely=user_lists_len+0.22)
 
 
