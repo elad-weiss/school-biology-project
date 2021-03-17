@@ -8,14 +8,17 @@ import sorter
 
 
 class task_bar:
-    def __init__(self, root, text, place):
+    def __init__(self, root, text, place, state, curr_frame):
         self.task_frame = LabelFrame(root, text="", padx=5, pady=5)
         var = IntVar()
         self.start_task_btn = Button(self.task_frame, text="start",
                                      command=lambda: start_task(place, self.start_task_btn))
+        if state: self.start_task_btn.config(state=DISABLED)
+        else: self.start_task_btn.config(state=NORMAL)
         self.start_task_btn.place(relx=0.85, rely=-0.1)
         self.task_status = Checkbutton(self.task_frame, text=text, variable=var,
-                                       command=lambda: edit_task_status(var.get(), place, self.start_task_btn), padx=5)
+                                       command=lambda: edit_task_status(var.get(), place, self.start_task_btn, curr_frame, root),
+                                       padx=5)
         self.task_status.place(relx=0.01, rely=-0.1)
         Label(self.task_frame, text="").grid(column=0, row=0)
         self.task_frame.pack()
@@ -37,7 +40,7 @@ def load_list(name, root, curr_frame):
         task_bars = []
         place = (name, 0)
         for task in list_content:
-            curr_task_bar = task_bar(main_frame, task[0], place)
+            curr_task_bar = task_bar(main_frame, task[0], place, task[1], curr_frame)
             task_bars.append(curr_task_bar.create_task_bar())
             task_status = curr_task_bar.get_status()
             if task[1]:
@@ -52,7 +55,7 @@ def load_list(name, root, curr_frame):
         return main_frame
 
 
-def edit_task_status(var, place, start_btn):
+def edit_task_status(var, place, start_btn, root, curr_frame):
     with open("lists.json") as f:
         data = json.load(f)
     if var == 0:
@@ -83,10 +86,9 @@ def edit_task_status(var, place, start_btn):
             data[place[0]][place[1]].append(minutes_sum)
             json.dump(data, f, indent=2)
         start_btn.config(state=DISABLED)
-        #TODO: check how long the task took and then sort
-        sort_list(place[0])
-        #TODO: load list after sorting
+        score_sort(place[0], root, curr_frame)
     else: print("An error has happened")
+
 
 def add_task(name, root, curr_frame):
     #creating a new window and setting a title
@@ -210,6 +212,40 @@ def save_new_list(list_name, window, root):
     main.main_window()
 
 
+def delete_list(root):
+    #set up window
+    delete_list_win = Toplevel()
+    delete_list_win.title("delete list")
+    delete_list_win.geometry("250x75")
+    #choose list to delete label
+    Label(delete_list_win, text="Choose list to delete:  ", font="Helvetica 12").grid(row=0, column=0)
+    #the variable that contains the list to delete
+    list_to_del = StringVar()
+    #a list containing all the user lists
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    user_lists = [name for name in data.keys()]
+    list_to_del.set(user_lists[0])
+    #all lists dropdown menu
+    list_to_del_menu = OptionMenu(delete_list_win, list_to_del, *user_lists)
+    list_to_del_menu.grid(row=0, column=1)
+    #delete btn
+    delete_btn = Button(delete_list_win, text="delete", font="Helvetica 12",
+                        command=lambda: delete_list_from_db(list_to_del.get(), delete_list_win, root))
+    delete_btn.grid(row=1, column=1)
+
+
+def delete_list_from_db(list_name, window, root):
+    with open("lists.json") as rf:
+        data = json.load(rf)
+    del data[list_name]
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
+    window.destroy()
+    root.destroy()
+    main.main_window()
+
+
 def sort_list(list_name):
     with open("sorting_templates.json") as f:
         data = json.load(f)
@@ -237,9 +273,26 @@ def sort_list(list_name):
     elif template == "sort i": sorter.sort_i(list_name)
     elif template == "sort j": sorter.sort_j(list_name)
 
+
+def score_sort(list_name, root, curr_frame):
+    finished_list = True
+    with open("lists.json") as rf:
+        data = json.load(rf)
+        curr_list = data[list_name]
+    for task in curr_list:
+        if not task[1]:
+            finished_list = False
+            break
+    # TODO: check how long the task took and then sort
+    sort_list(list_name)
+    # TODO: load list after sorting
+    load_list(list_name, root, curr_frame)
+
+
 def show_about():
     url = "https://docs.google.com/document/d/11XoErCZp7__bgPXNzKR_mUDm_TOHd2FSd5p2P30XewM/edit?usp=sharing"
     webbrowser.open(url, new=1)
+
 
 def get_time():
     full_time = str(datetime.datetime.now())
