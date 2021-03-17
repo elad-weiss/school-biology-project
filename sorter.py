@@ -123,6 +123,7 @@ def sort_h(list_name):
     with open("lists.json", "w") as wf:
         json.dump(data, wf, indent=2)
 
+#sorts disliked first and liked last when in each sublist(liked and disliked) its shorted from shortest to longest
 def sort_i(list_name):
     sort_e(list_name)
     with open("lists.json") as rf:
@@ -142,6 +143,7 @@ def sort_i(list_name):
     with open("lists.json", "w") as wf:
         json.dump(data, wf, indent=2)
 
+#sorts disliked first and liked last when in each sublist(liked and disliked) its shorted from longest to shortest
 def sort_j(list_name):
     sort_e(list_name)
     with open("lists.json") as rf:
