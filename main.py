@@ -73,11 +73,17 @@ class main_window:
         #loads all the task bars on screen
         functionalities.load_list(self.curr_list, self.root, self.curr_frame)
 
+        #delete task button
+        delete_task_btn = Button(self.root, text="- Delete Task", font="Helvetica 14", padx=15, pady=15, borderwidth=0.5,
+                                 command=lambda: functionalities.delete_task(self.curr_list, self.root, self.curr_frame))
+        delete_task_btn.place(relx=0.42, rely=0.85)
+
         #an "add task" button
         add_task_btn = Button(self.root, text="+ Add Task", font="Helvetica 14", padx=15, pady=15, borderwidth=0.5,
                               command=lambda: functionalities.add_task(self.curr_list, self.root, self.curr_frame))
-        add_task_btn.place(relx=0.55, rely=0.85)
+        add_task_btn.place(relx=0.58, rely=0.85)
 
+        #about button
         about_btn = Button(self.root, text="ABOUT", font="Helvetica 14", command=functionalities.show_about)
         about_btn.place(relx=0.90, rely=0.90)
 

@@ -168,6 +168,44 @@ def save_new_task(window, list_name, task_name, est_time, is_liked, root, curr_f
     window.destroy()
 
 
+def delete_task(list_name, root, curr_frame):
+    #get current list data
+    with open("lists.json") as rf:
+        data = json.load(rf)
+        curr_list = data[list_name]
+    user_tasks = []
+    for task in range(len(curr_list)):
+        user_tasks.append(curr_list[task][0])
+
+    #set up gui
+    delete_task_win = Toplevel()
+    delete_task_win.title("delete task")
+    #set up "choose list" label
+    Label(delete_task_win, text="choose task to delete:  ").grid(row=0, column=0)
+    #set up option menu with all current tasks and the variable that saves which task has been chosen
+    task_to_del = StringVar()
+    task_to_del.set(user_tasks[0])
+    task_to_del_menu = OptionMenu(delete_task_win, task_to_del, *user_tasks)
+    task_to_del_menu.grid(row=0, column=1)
+    #set up delete task button
+    del_task_btn = Button(delete_task_win, text="delete", font="Helvetica 12",
+                          command=lambda: delete_task_from_db(delete_task_win, list_name, task_to_del.get(), root, curr_frame))
+    del_task_btn.grid(row=1, column=1)
+
+
+def delete_task_from_db(window, list_name, task_name, root, curr_frame):
+    task_place = IntVar()
+    with open("lists.json") as rf:
+        data = json.load(rf)
+        for task in range(len(data[list_name])):
+            if data[list_name][task][0] == task_name: task_place.set(task)
+    del data[list_name][task_place.get()]
+    with open("lists.json", "w") as wf:
+        json.dump(data, wf, indent=2)
+    load_list(list_name, root, curr_frame)
+    window.destroy()
+
+
 def add_list(root):
     #create and setup the creation window
     new_list_window = Toplevel()
